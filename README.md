@@ -10,6 +10,7 @@ This server runs the simulation, manages the system state, and exposes the prima
 Simulation Loop: Runs every 60 seconds to generate dynamic Solar and Wind inputs, update the Electricity Price, and then call the Python service for a new production target.
 
 **Key Files**:
+
 ->server.js: Main entry point and loop controller.
 
 ->systemState.js: Manages current system data and energy simulation.
