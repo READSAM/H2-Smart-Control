@@ -175,7 +175,7 @@ H2-Smart-Control/
 
 -----
 
-## ⚙️ Backend Architecture (Your Contribution)
+## ⚙️ Backend Architecture 
 
 The backend operates as two interconnected services: a **Node.js API Server** (the simulation controller) and a **Python ML Service** (the prediction engine).
 
