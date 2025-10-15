@@ -1,13 +1,194 @@
+/* Import Bootstrap CSS */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+/* Import Bootstrap Icons CSS */
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-moz-osx-font-smoothing: grayscale;
+    background-color: #1a1a1a; /* Dark background */
+    color: #e0e0e0; /* Light text */
+    overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root, .App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    display: flex;
+    flex: 1;
+}
+
+.main-content-area {
+    flex: 1;
+    padding: 2rem; /* Increased padding for more space */
+    background-color: #1a1a1a; /* Ensure main content area matches body background */
+}
+
+/* Custom dark theme adjustments for Bootstrap components */
+.bg-dark-custom {
+    background-color: #2a2a2a !important; /* Slightly lighter dark for components */
+}
+
+.text-green-h2 {
+    color: #4CAF50 !important;
+}
+
+.btn-green-h2 {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+.btn-green-h2:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+    color: white;
+}
+
+.widget-card {
+    background-color: #2a2a2a; /* All widgets use this darker background */
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #e0e0e0;
+}
+
+.widget-card .card-header {
+    background-color: #3a3a3a; /* Slightly lighter dark for header */
+    border-bottom: 1px solid #4a4a4a;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.1em; /* Slightly larger header font */
+    padding: 1rem 1.25rem; /* More padding */
+}
+
+.card-body {
+    padding: 1.25rem; /* Default Bootstrap padding, adjust if needed */
+}
+
+.status-dot-green { background-color: #4CAF50; border-radius: 50%; width: 10px; height: 10px; display: inline-block; margin-right: 5px; }
+.status-dot-orange { background-color: #ffc107; border-radius: 50%; width: 10px; height: 10px; display: inline-block; margin-right: 5px; }
+.status-dot-red { background-color: #dc3545; border-radius: 50%; width: 10px; height: 10px; display: inline-block; margin-right: 5px; }
+.status-dot-blue { background-color: #007bff; border-radius: 50%; width: 10px; height: 10px; display: inline-block; margin-right: 5px; }
+
+/* Sidebar specific styles */
+.sidebar {
+    width: 280px;
+    background-color: #2a2a2a;
+    padding: 2rem 0; /* More padding for sidebar */
+    border-right: 1px solid #3a3a3a;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar .nav-link {
+    color: #e0e0e0;
+    padding: 0.75rem 1.5rem; /* Adjusted padding */
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s, color 0.2s;
+    border-radius: 0 50px 50px 0;
+    margin-right: 15px; /* Ensure space from the right edge */
+    font-size: 1.05em; /* Slightly larger font */
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.3rem; /* Larger icons */
+    margin-right: 1rem; /* More space for icons */
+}
+
+.critical-alerts-sidebar {
+    background-color: #331f1f;
+    border-radius: 8px;
+    padding: 1.25rem; /* More padding */
+    margin: 2rem 1.25rem; /* More margin */
+    border: 1px solid #dc3545;
+}
+
+.critical-alerts-sidebar h5 {
+    color: #dc3545;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+}
+
+.critical-alerts-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.critical-alerts-sidebar li {
+    color: #ffcccc;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+/* Custom tank icon for Storage Overview */
+.storage-tank-icon-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    height: 100px; /* Consistent height */
+    align-items: flex-end; /* Align tanks at the bottom */
+}
+
+.storage-tank-icon {
+    width: 50px;
+    height: 80px;
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 5px;
+    display: flex; /* For label positioning */
+    flex-direction: column-reverse; /* To place fill from bottom */
+}
+
+.tank-fill {
+    position: absolute; /* Changed for flexbox */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transition: height 0.5s ease-out;
+}
+
+.tank-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+    z-index: 1; /* Ensure label is above fill */
+}
+
+/* Kpi text sizing */
+.kpi-lg {
+    font-size: 2.8rem;
+    font-weight: bold;
+}
+.kpi-md {
+    font-size: 1.8rem;
+    font-weight: bold;
 }
