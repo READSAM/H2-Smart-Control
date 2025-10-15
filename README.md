@@ -173,78 +173,32 @@ H2-Smart-Control/
 ```
 
 
-# ⚙️ **Backend Architecture**
-The backend operates as two interconnected services: a Node.js API Server (the controller) and a Python ML Service (the prediction engine).
+-----
 
-1.**Node.js API Server (Port 3001)**
-This server runs the simulation, manages the system state, and exposes the primary data endpoint (/api/system-state).
+## ⚙️ Backend Architecture (Your Contribution)
 
-Simulation Loop: Runs every 60 seconds to generate dynamic Solar and Wind inputs, update the Electricity Price, and then call the Python service for a new production target.
+The backend operates as two interconnected services: a **Node.js API Server** (the simulation controller) and a **Python ML Service** (the prediction engine).
 
-**Key Files**:
+### 1. Node.js API Server (Port 3001)
 
-->server.js: Main entry point and loop controller.
+This server runs the system simulation, manages the current system state, and exposes the primary data endpoint (`/api/system-state`).
 
-->systemState.js: Manages current system data and energy simulation.
+* **Simulation Loop:** Runs every **60 seconds** to generate dynamic $\text{Solar}$ and $\text{Wind}$ inputs, update the $\text{Electricity Price}$, and call the Python service to receive a new production target.
 
-->priceService.js: Generates the fluctuating real-time grid price.
+| File | Role |
+| :--- | :--- |
+| `server.js` | Main entry point and simulation loop controller. |
+| `systemState.js` | Manages current system data and dynamic energy input generation. |
+| `priceService.js` | Generates the fluctuating real-time grid electricity price. |
 
-2. **Python ML Prediction Service (Port 5000)**
-This service uses Flask to expose the /predict/production-rate endpoint.
+### 2. Python ML Prediction Service (Port 5000)
 
-Prediction Logic: Due to the provided ML model's strong bias (always predicting 56 kg/hr), the prediction step was replaced with a rule-based heuristic to ensure dynamic and realistic simulation results based on two critical inputs: Electricity Price and Total Renewable Energy.
+This service uses Flask to expose the `/predict/production-rate` endpoint.
 
-Condition	Rate (kg/hr)	Logic:
-High	56 kg/hr	Price≤$120/MWh AND Renewables≥20 MW
-Low	48 kg/hr	Price≥$180/MWh OR Renewables<5 MW
-Medium	52 kg/hr	All other conditions
-🚀 To Run the Backend
-Both services must be started in separate terminal windows:
+* **Prediction Logic Implemented:** The prediction step within the backend is driven by a **rule-based heuristic** that you developed. This logic ensures the system provides dynamic and realistic target rates based on immediate market and energy factors. The full logic is based on **Electricity Price** and **Total Renewable Energy** ($\text{Solar} + \text{Wind}$):
 
-Start Python Service:
-Bash:
-cd ml-service
-python app.py
-
-Start Node.js Server:
-Bash
-node backend/server.js
-
-# ML Architecture 
-
-*1. Data Input Layer*
-- *Features used:*
-  - PV_Power_kW (solar power)
-  - Wind_Power_kW (wind power)
-  - Electrolyzer_Efficiency_%
-  - System_Efficiency_%
-  - Empirical production estimate (based on real plant kWh/kg)
-  - (Optionally) Feasibility_Score, weather, or other process features
-  
-*2. Feature Engineering*
-- Normalize/transform input features (convert % to decimals, create estimates, bin targets).
-
-*3. Target Binning*
-- Hydrogen_Production_kg/day (actual value from dataset)  
-→ Bin into discrete classes (Low, Medium, High production rates).
-
-*4. ML Model*
-- *XGBoost Classifier*
-  - Tree-based ensemble algorithm.
-  - Learns to classify each data record into production class (Low, Medium, High).
-  - Hyperparameters: depth, estimators, etc.
-  
-*5. Output Layer*
-- Recommended production rate class.
-- Class probabilities (for operator confidence/advisory).
-- (Optionally) Feasibility score displayed alongside.
-
-*6. Dashboard/Operator Interface*
-- Shows recommended class, probability/confidence, and feasibility.
-- Visualizes model outputs for smart decision support.
-
-## Summary
-
-- This system learns from historical data to recommend safe setpoints for hydrogen production, based on renewable input and operational characteristics.
-- It provides actionable recommendations, probability/confidence for each recommendation, and combines operational logic (e.g. feasibility score) for safer automation.
-
+| Condition | Rate (kg/hr) | Logic |
+| :--- | :--- | :--- |
+| **High** | $\text{56 kg/hr}$ | $\text{Price} \le \$120/\text{MWh}$ **AND** $\text{Renewables} \ge 20 \text{ MW}$ |
+| **Low** | $\text{48 kg/hr}$ | $\text{Price} \ge \$180/\text{MWh}$ **OR** $\text{Renewables} < 5 \text{ MW}$ |
+| **Medium** | $\text{52 kg/hr}$ | All other conditions |
