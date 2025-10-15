@@ -41,6 +41,44 @@ Start Node.js Server:
 Bash
 node backend/server.js
 
+# ML Architecture 
+
+*1. Data Input Layer*
+- *Features used:*
+  - PV_Power_kW (solar power)
+  - Wind_Power_kW (wind power)
+  - Electrolyzer_Efficiency_%
+  - System_Efficiency_%
+  - Empirical production estimate (based on real plant kWh/kg)
+  - (Optionally) Feasibility_Score, weather, or other process features
+  
+*2. Feature Engineering*
+- Normalize/transform input features (convert % to decimals, create estimates, bin targets).
+
+*3. Target Binning*
+- Hydrogen_Production_kg/day (actual value from dataset)  
+→ Bin into discrete classes (Low, Medium, High production rates).
+
+*4. ML Model*
+- *XGBoost Classifier*
+  - Tree-based ensemble algorithm.
+  - Learns to classify each data record into production class (Low, Medium, High).
+  - Hyperparameters: depth, estimators, etc.
+  
+*5. Output Layer*
+- Recommended production rate class.
+- Class probabilities (for operator confidence/advisory).
+- (Optionally) Feasibility score displayed alongside.
+
+*6. Dashboard/Operator Interface*
+- Shows recommended class, probability/confidence, and feasibility.
+- Visualizes model outputs for smart decision support.
+
+## Summary
+
+- This system learns from historical data to recommend safe setpoints for hydrogen production, based on renewable input and operational characteristics.
+- It provides actionable recommendations, probability/confidence for each recommendation, and combines operational logic (e.g. feasibility score) for safer automation.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
