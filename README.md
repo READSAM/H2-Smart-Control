@@ -195,7 +195,7 @@ This server runs the system simulation, manages the current system state, and ex
 
 This service uses Flask to expose the `/predict/production-rate` endpoint.
 
-* **Prediction Logic Implemented:** The prediction step within the backend is driven by a **rule-based heuristic** that you developed. This logic ensures the system provides dynamic and realistic target rates based on immediate market and energy factors. The full logic is based on **Electricity Price** and **Total Renewable Energy** ($\text{Solar} + \text{Wind}$):
+* **Prediction Logic Implemented:** The prediction step within the backend is driven by a **rule-based heuristic** that developed manually. This logic ensures the system provides dynamic and realistic target rates based on immediate market and energy factors. The full logic is based on **Electricity Price** and **Total Renewable Energy** ($\text{Solar} + \text{Wind}$):
 
 | Condition | Rate (kg/hr) | Logic |
 | :--- | :--- | :--- |
